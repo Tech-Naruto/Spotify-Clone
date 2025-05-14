@@ -96,7 +96,7 @@
     <link rel="stylesheet" href="Spotify.css" />
   </head>
   <body>
-    <div class="navbar">
+    <div class="navbar mobile-hide">
       <div class="nav-keys">
         <div class="home dull-options" style="opacity: 1">
           <i class="fa-solid fa-house"></i><span>Home</span>
@@ -133,17 +133,30 @@
     <div class="main">
       <div class="main-header">
         <div class="header-left">
-          <button id="left-nav" class="header-button-nav dull-options">
+          <button
+            id="left-nav"
+            class="header-button-nav dull-options mobile-hide"
+          >
             <i class="fa-regular fa-chevron-left"></i>
           </button>
-          <button id="right-nav" class="header-button-nav dull-options hide">
+          <button
+            id="right-nav"
+            class="header-button-nav dull-options mobile-hide"
+          >
             <i class="fa-regular fa-chevron-right"></i>
           </button>
+          <div class="mobile-header desktop-hide">Good Morning</div>
         </div>
         <div class="header-right">
-          <button id="upgrade" class="header-button-user hide">Upgrade</button>
-          <button id="install" class="header-button-user">
-            <i class="fa-regular fa-circle-down"></i>Install App
+          <button
+            id="upgrade"
+            class="header-button-user mobile-hide enlarge-options"
+          >
+            Explore Premium
+          </button>
+          <button id="install" class="header-button-user enlarge-options">
+            <i class="fa-regular fa-circle-down"></i
+            ><span class="mobile-hide">Install App</span>
           </button>
           <button id="user" class="header-button-user">
             <i class="fa-solid fa-user"></i>
@@ -238,7 +251,7 @@
         </div>
       </div>
     </div>
-    <div class="media-player">
+    <div class="media-player" style="display:none">
       <div
         class="img"
         style="background-image: url(Assets/Logo/Spotify\ Faded\ Logo.png)"
@@ -251,13 +264,14 @@
         <div class="music-tools">
           <i class="fa-regular fa-heart dull-options"></i>
           <i class="fa-solid fa-screencast dull-options"></i>
+          <i class="fa-solid fa-play media-play-pause-button"></i>
         </div>
       </div>
-      <div class="controls">
+      <div class="controls mobile-hide">
         <div class="control-buttons">
           <i class="fa-solid fa-shuffle dull-options"></i>
           <i class="fa-solid fa-backward-step dull-options"></i>
-          <i class="fa-solid fa-play enlarge-options media-play-pause-button"></i>
+          <i class="fa-solid fa-play media-play-pause-button"></i>
           <i class="fa-solid fa-forward-step dull-options"></i>
           <i class="fa-solid fa-repeat dull-options"></i>
         </div>
@@ -265,12 +279,20 @@
           <div class="current-play-time">0:00</div>
           <div class="play-bar">
             <div class="progress-bar-fill"></div>
-            <input type="range" id="play-time" class="progress-bar" value="0" min="0" max="210" autocomplete="off"/>
+            <input
+              type="range"
+              id="play-time"
+              class="progress-bar"
+              value="0"
+              min="0"
+              max="210"
+              autocomplete="off"
+            />
           </div>
           <div class="total-play-time">3:30</div>
         </div>
       </div>
-      <div class="volume-options">
+      <div class="volume-options mobile-hide">
         <i class="fa-regular fa-square-caret-right dull-options"></i>
         <i class="fa-sharp fa-solid fa-microphone-stand dull-options"></i>
         <i class="fa-solid fa-list-music dull-options"></i>
@@ -279,12 +301,33 @@
         <div class="volume-controls">
           <div class="volume-bar">
             <div class="progress-bar-fill"></div>
-            <input type="range" id="volume" class="progress-bar" value="0" min = "0" max = "100" autocomplete="off"/>
+            <input
+              type="range"
+              id="volume"
+              class="progress-bar"
+              value="0"
+              min="0"
+              max="100"
+              autocomplete="off"
+            />
           </div>
         </div>
         <i
           class="fa-solid fa-arrow-up-right-and-arrow-down-left-from-center dull-options"
         ></i>
+      </div>
+
+      <div class="play-bar desktop-hide" style="min-width: 100vw;">
+        <div class="progress-bar-fill"></div>
+        <input
+          type="range"
+          id="play-time"
+          class="progress-bar"
+          value="0"
+          min="0"
+          max="210"
+          autocomplete="off"
+        />
       </div>
     </div>
 

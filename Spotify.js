@@ -13,7 +13,7 @@ podcast_songs.forEach((song) => {
   let img = song.querySelector(".img");
 
   song.addEventListener("mouseenter", () => {
-    song.style.backgroundColor = "#292828"
+    song.style.backgroundColor = "#292828";
     song.style.transition = "background-color 0.2s ease";
     let pause_btn = img.querySelector(".fa-pause");
     let play_btn = img.querySelector(".fa-play");
@@ -47,13 +47,26 @@ podcast_songs.forEach((song) => {
               song_playing.style.boxShadow = "none";
               remove_btn(pause_btn, img);
               stop_playing();
-              play_time.value = 0;
-              play_time.dispatchEvent(new Event("input"));
+              play_time.forEach((play_time) => {
+                play_time.value = 0;
+                play_time.dispatchEvent(new Event("input"));
+              });
             }
             play_btn.className = "fa-solid fa-pause";
             if (media_control_buttons.querySelector(".fa-play")) {
               media_control_buttons.querySelector(".fa-play").className =
-                "fa-solid fa-pause enlarge-options media-play-pause-button";
+                "fa-solid fa-pause media-play-pause-button";
+            }
+            //For mobile play-pause button
+            if (music_tools.querySelector(".fa-play")) {
+              music_tools.querySelector(".fa-play").className =
+                "fa-solid fa-pause media-play-pause-button";
+            }
+            if (!song_playing) {
+              play_time.forEach((play_time) => {
+                play_time.value = 0;
+                play_time.dispatchEvent(new Event("input"));
+              });
             }
             song_playing = song;
             song.style.boxShadow = "0px 0px 10px rgb(122, 224, 122)";
@@ -70,14 +83,41 @@ podcast_songs.forEach((song) => {
               .querySelector(".song-detail").innerText = song
               .querySelector(".img-detail")
               .querySelector(".song-detail").innerText;
-              start_playing();
+            start_playing(play_time);
           } else {
             play_btn.className = "fa-solid fa-play";
             media_control_buttons.querySelector(".fa-pause").className =
-              "fa-solid fa-play enlarge-options media-play-pause-button";
-              stop_playing();
+              "fa-solid fa-play media-play-pause-button";
+            //For mobile play-pause button
+            music_tools.querySelector(".fa-pause").className =
+              "fa-solid fa-play media-play-pause-button";
+            stop_playing();
           }
         });
+
+        if (!song_playing) {
+          play_btn.addEventListener(
+            "click",
+            () => {
+              media_player.style.display = "";
+              setTimeout(() => {
+                media_player.style.opacity = "1";
+                media_player.style.bottom = "0";
+              }, 50);
+
+              if (isMobile()) {
+                console.log("Mobile browser");
+                document.querySelector(".main-body").style.marginBottom =
+                  "10rem"; // Applies only on mobile
+              } else {
+                console.log("Laptop/desktop browser");
+                document.querySelector(".main-body").style.marginBottom =
+                  "5rem"; // Applies only on desktop
+              }
+            },
+            { once: true }
+          );
+        }
       }, 50);
     }
   });
@@ -99,62 +139,64 @@ podcast_songs.forEach((song) => {
 });
 
 //Play-Pause button in media control
+let music_tools = document.querySelector(".music-tools"); // For mobile play-pause button
 let media_control_buttons = media_player.querySelector(".control-buttons");
-let media_play_pause_button = media_control_buttons.querySelector(
+let media_play_pause_button = document.querySelectorAll(
   ".media-play-pause-button"
 );
-media_play_pause_button.addEventListener("click", () => {
-  if (
-    media_play_pause_button.className ==
-    "fa-solid fa-pause enlarge-options media-play-pause-button"
-  ) {
-    media_play_pause_button.className =
-      "fa-solid fa-play enlarge-options media-play-pause-button";
-    let play_btn = song_playing
-      .querySelector(".img")
-      .querySelector(".fa-pause");
-    play_btn.className = "fa-solid fa-play";
-    stop_playing();
-  } else if (song_playing) {
-    media_play_pause_button.className =
-      "fa-solid fa-pause enlarge-options media-play-pause-button";
-    let play_btn = song_playing.querySelector(".img").querySelector(".fa-play");
-    play_btn.className = "fa-solid fa-pause";
-    start_playing();
-  }
+media_play_pause_button.forEach((button) => {
+  button.addEventListener("click", () => {
+    if (button.className == "fa-solid fa-pause media-play-pause-button") {
+      button.className = "fa-solid fa-play media-play-pause-button";
+      let play_btn = song_playing
+        .querySelector(".img")
+        .querySelector(".fa-pause");
+      play_btn.className = "fa-solid fa-play";
+      stop_playing();
+    } else if (song_playing) {
+      button.className = "fa-solid fa-pause media-play-pause-button";
+      let play_btn = song_playing
+        .querySelector(".img")
+        .querySelector(".fa-play");
+      play_btn.className = "fa-solid fa-pause";
+      start_playing(play_time);
+    }
+  });
 });
 
-function start_playing(){
+function start_playing(play_time) {
   interval_id = setInterval(() => {
-    if(play_time.value == play_time.max){
+    if (play_time[0].value == play_time[0].max) {
       console.log("song completed");
       stop_playing();
       setTimeout(() => {
         forward_step.dispatchEvent(new Event("click"));
       }, 100);
     }
-    play_time.value = Number(play_time.value) + 1;
-    console.log(play_time.value);
-    play_time.dispatchEvent(new Event("input"));
+    play_time.forEach((play_time) => {
+      play_time.value = Number(play_time.value) + 1;
+      play_time.dispatchEvent(new Event("input"));
+    });
+    console.log(play_time[0].value);
   }, 1000);
 }
 
-function stop_playing(){
+function stop_playing() {
   clearInterval(interval_id);
   console.log("stop playing");
   interval_id = null;
 }
 
 //Progress bar in media control
-let play_bar = document.querySelector(".play-bar");
-let play_time = document.querySelector("#play-time");
+let play_bar = document.querySelectorAll(".play-bar");
+let play_time = document.querySelectorAll("#play-time");
 let current_play_time = document.querySelector(".current-play-time");
 let total_play_time = document.querySelector(".total-play-time");
 let root_font = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
-play_time.addEventListener("input", () => {
+play_time[0].addEventListener("input", () => {
   console.log("input triggered");
-  let input_value = play_time.value;
+  let input_value = play_time[0].value;
   let curr_time_min = Math.floor(input_value / 60);
   let curr_time_sec = input_value % 60;
   let curr_time = `${curr_time_min}:`;
@@ -165,12 +207,14 @@ play_time.addEventListener("input", () => {
   }
   current_play_time.innerText = curr_time;
 
-  let progress_bar_fill = play_bar.querySelector(".progress-bar-fill");
-  let total_width = play_time.offsetWidth - Math.floor(0.5 * root_font);
-  let fill_width =
-    Math.floor(0.4 * root_font) +
-    Math.floor((total_width / Number(play_time.max)) * Number(input_value));
-  progress_bar_fill.style.width = `${fill_width}px`;
+  play_time.forEach((play_time) => {
+    let progress_bar_fill = play_time.previousElementSibling;
+    let total_width = play_time.offsetWidth - Math.floor(0.5 * root_font);
+    let fill_width =
+      Math.floor(0.2 * root_font) +
+      Math.floor((total_width / Number(play_time.max)) * Number(input_value));
+    progress_bar_fill.style.width = `${fill_width}px`;
+  });
 });
 
 // Volume bar in media control
@@ -193,13 +237,13 @@ let backward_step = media_control_buttons.querySelector(".fa-backward-step");
 
 forward_step.addEventListener("click", () => {
   if (song_playing) {
-    next_song(song_playing, 1);
+    swipe_animation(-100);
   }
 });
 
 backward_step.addEventListener("click", () => {
   if (song_playing) {
-    next_song(song_playing, -1);
+    swipe_animation(100);
   }
 });
 
@@ -218,12 +262,60 @@ function next_song(song_playing, num) {
       .querySelector(".fa-play")
       .dispatchEvent(new Event("click"));
   }, 50);
-  play_time.value = 0;
-  play_time.dispatchEvent(new Event("input"));
+  play_time.forEach((play_time) => {
+    play_time.value = 0;
+    play_time.dispatchEvent(new Event("input"));
+  });
 }
 
+//Detecting mobile browser
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+}
 
-let root_element = document.documentElement;
-let root_style = getComputedStyle(root_element).fontSize;
-console.log(root_style);
-root_element.style.fontSize = "16px";
+//Swipe effect on media player
+let startX = 0;
+media_player.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].clientX; // Stores the starting touch position
+});
+media_player.addEventListener("touchend", (e) => {
+  let endX = e.changedTouches[0].clientX; // Stores the ending touch position
+
+  let threshold = window.innerWidth * 0.15; // Adjust the threshold as needed
+
+  if (startX - endX > threshold) {
+    console.log("swipe left");
+    swipe_animation(-100);
+  } else if (endX - startX > threshold) {
+    console.log("swipe right");
+    swipe_animation(100);
+  }
+});
+
+function swipe_animation(x) {
+  let details = song_playing_details.querySelectorAll(".song, .song-detail");
+  details.forEach((details) => {
+    details.style.transform = `translateX(${x}%)`;
+    details.style.opacity = "0";
+    details.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+    media_player_img.style.transform = "scale(0)";
+    media_player_img.style.transition = "transform 0.3s ease";
+  });
+  setTimeout(() => {
+    details.forEach((details) => {
+      details.style.transition = "transform 0s ease, opacity 0.5s ease";
+      details.style.transform = `translateX(${-x}%)`;
+    });
+  }, 350);
+  setTimeout(() => {
+    next_song(song_playing, x > 0 ? -1 : 1);
+    details.forEach((details) => {
+      details.style.transition = "transform 0.3s ease, opacity 0.5s ease";
+      details.style.opacity = "1";
+      details.style.transform = "translateX(0%)"; 
+      media_player_img.style.transform = "scale(1)";
+    });
+  }, 400);
+}
