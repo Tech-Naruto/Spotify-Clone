@@ -14,7 +14,7 @@ podcast_songs.forEach((song) => {
 
   song.addEventListener("mouseenter", () => {
     song.style.backgroundColor = "#292828";
-    song.style.transition = "background-color 0.2s ease";
+    song.style.transition = "background-color 0.2s ease, box-shadow 0.2s ease";
     let pause_btn = img.querySelector(".fa-pause");
     let play_btn = img.querySelector(".fa-play");
     if (!pause_btn && !play_btn) {
@@ -45,6 +45,7 @@ podcast_songs.forEach((song) => {
               let img = song_playing.querySelector(".img");
               let pause_btn = img.querySelector(".fa-solid");
               song_playing.style.boxShadow = "none";
+              song_playing.style.backgroundColor = "transparent";
               remove_btn(pause_btn, img);
               stop_playing();
               play_time.forEach((play_time) => {
@@ -123,10 +124,10 @@ podcast_songs.forEach((song) => {
   });
   song.addEventListener("mouseleave", () => {
     if (song_playing != song) {
+      song.style.backgroundColor = "transparent";
       let play_btn = img.querySelector(".fa-play");
       remove_btn(play_btn, img);
     }
-    song.style.backgroundColor = "transparent";
   });
 
   function remove_btn(btn, img) {
@@ -255,6 +256,7 @@ function next_song(song_playing, num) {
   if (song_index == 0 && num == -1) {
     song_index = podcast_songs.length;
   }
+  podcast_songs[song_index].dispatchEvent(new Event("mouseleave"));
   podcast_songs[song_index + num].dispatchEvent(new Event("mouseenter"));
   setTimeout(() => {
     podcast_songs[song_index + num]
