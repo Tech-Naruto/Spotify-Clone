@@ -232,6 +232,10 @@ button {
   flex-direction: column;
   overflow: scroll;
   transition: margin-bottom 1s ease;
+  ::-webkit-scrollbar{ 
+    display: none;
+  }
+  scrollbar-width: none;
 }
 
 @media (max-width: 1000px) {
@@ -518,7 +522,7 @@ button {
   align-items: center;
   position: relative;
 }
-
+ 
 .progress-bar {
   width: 100%;
 }
@@ -541,6 +545,7 @@ input[type="range"] {
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
   background: white;
   border-radius: 0.5rem;
   height: 0.2rem;
