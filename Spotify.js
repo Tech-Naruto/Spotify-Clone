@@ -250,13 +250,13 @@ backward_step.addEventListener("click", () => {
 
 function next_song(song_playing, num) {
   let song_index = Array.from(podcast_songs).indexOf(song_playing);
+  podcast_songs[song_index].dispatchEvent(new Event("mouseleave"));
   if (song_index == podcast_songs.length - 1 && num == 1) {
     song_index = -1;
   }
   if (song_index == 0 && num == -1) {
     song_index = podcast_songs.length;
   }
-  podcast_songs[song_index].dispatchEvent(new Event("mouseleave"));
   podcast_songs[song_index + num].dispatchEvent(new Event("mouseenter"));
   setTimeout(() => {
     podcast_songs[song_index + num]
